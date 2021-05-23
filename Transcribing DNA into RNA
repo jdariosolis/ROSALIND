@@ -20,8 +20,8 @@
 #CODE
 
 dna_sequence = input("Enter your DNA sequence: ")
-
 rna_sequence = dna_sequence.replace("T", "U")
+
 print(rna_sequence)
 
 
