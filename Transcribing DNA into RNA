@@ -19,10 +19,10 @@
 
 #CODE
 
-sequence = input("Enter your DNA sequence: ")
+dna_sequence = input("Enter your DNA sequence: ")
 
-sequence.replace("T", "U")
-print(sequence.replace("T", "U"))
+rna_sequence = dna_sequence.replace("T", "U")
+print(rna_sequence)
 
 
 
