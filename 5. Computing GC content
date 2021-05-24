@@ -1,0 +1,73 @@
+#!/usr/bin/env python
+
+#PROBLEM
+# ================
+#The GC-content of a DNA string is given by the percentage of symbols in the string that are 'C' or 'G'. For example, the GC-content of "AGCTATAG" is 37.5%. 
+#Note that the reverse complement of any DNA string has the same GC-content.
+#DNA strings must be labeled when they are consolidated into a database. A commonly used method of string labeling is called FASTA format. 
+#In this format, the string is introduced by a line that begins with '>', followed by some labeling information. 
+#Subsequent lines contain the string itself; the first line to begin with '>' indicates the label of the next string.
+#In Rosalind's implementation, a string in FASTA format will be labeled by the ID "Rosalind_xxxx", where "xxxx" denotes a four-digit code between 0000 and 9999.
+
+#Given: At most 10 DNA strings in FASTA format (of length at most 1 kbp each).
+#Return: The ID of the string having the highest GC-content, followed by the GC-content of that string. Rosalind allows for a default error of 0.001 in 
+#all decimal answers unless otherwise stated; please see the note on absolute error below.
+
+#Sample Dataset
+#>Rosalind_6404
+#CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCC
+#TCCCACTAATAATTCTGAGG
+#>Rosalind_5959
+#CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCT
+#ATATCCATTTGTCAGCAGACACGC
+#>Rosalind_0808
+#CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGAC
+#TGGGAACCTGCGGGCAGTAGGTGGAAT
+#Sample Output
+#Rosalind_0808
+#60.919540
+
+#================
+
+#CODE
+
+
+#First, we need to parse the FASTA file (make it readable for the interpreter). For this, we use Biopython (https://biopython.org/) or using the terminal command
+#pip3 install biopython
+
+from Bio import SeqIO
+
+#Open a dictionary where we will store key = seq_record.id and value = gccontent
+seq_gccont_dict = {}
+
+#Ask for the file name, important to have it in extension fasta and in the cwd
+file_name = input("Enter your file name (format file_name.fasta): ")
+
+#For every sequence, we parse the sequence, count GC and AT, compute GC content and store it in the dictionary we created.
+
+for seq_record in SeqIO.parse(file_name, "fasta"):
+    #Next lines are commented to make the program run faster, but can be activated to help visualization of sequences
+    #print(seq_record.id)
+    #print(repr(seq_record.seq))
+    #print(len(seq_record))
+    #print(seq_record.seq)
+
+    countgc = 0
+    countat = 0
+    countnt = countgc + countat
+
+    for nt in seq_record.seq:
+        if nt == "G" or nt == "C":
+            countgc +=1
+        elif nt == "A" or nt == "T":
+            countat +=1
+
+    countnt = countgc + countat
+    gccontent = (countgc/countnt)*100
+    seq_gccont_dict[seq_record.id] = gccontent
+    #print("GC content is: ", gccontent)
+
+#After having calculated all GC contents, we sort the dictionary's values in descending order and retrieve the highest GC content and seq_record.id
+sort_seq_gccont_dict = sorted(seq_gccont_dict.items(), key=lambda x: x[1], reverse=True)
+for i in sort_seq_gccont_dict:
+    print(i[0], i[1])
