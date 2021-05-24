@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+
+
+#PROBLEM
+#================
+
+#Given two strings s and t, t is a substring of s if t is contained as a contiguous collection of symbols in s (as a result, t must be no longer than s).
+
+#The position of a symbol in a string is the total number of symbols found to its left, including itself 
+#(e.g., the positions of all occurrences of 'U' in "AUGCUUCAGAAAGGUCUUACG" are 2, 5, 6, 15, 17, and 18). The symbol at position i of s is denoted by s[i].
+
+#A substring of s can be represented as s[j:k], where j and k represent the starting and ending positions of the substring in s; for example, 
+#if s = "AUGCUUCAGAAAGGUCUUACG", then s[2:5] = "UGCU".
+
+#The location of a substring s[j:k] is its beginning position j; note that t will have multiple locations in s if it occurs more than once as a substring of s.
+
+#Given: Two DNA strings s and t (each of length at most 1 kbp).
+#Return: All locations of t as a substring of s.
+
+#Sample Dataset
+#GATATATGCATATACTT
+#ATAT
+#Sample Output
+#2 4 10
+
+#================
+
+#CODE
+
+#Asking first for s (long string) and t (substring), we create a for loop where we advance one nt each time and compare t to the first nts of the new subsequence
+#If they are the same, we print the index +1, as Python uses 0-based numbering. 
+
+s = input("Enter your DNA sequence: ")
+t = input("Enter substring: ")
+
+n=0
+sub_s = [n, len(s)]
+
+for nt in range(0,len(s)):
+    sub_s=s[nt:nt+len(t)]
+    if sub_s == t:
+        print(nt+1, " ", end="")
