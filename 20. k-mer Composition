@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+
+#PROBLEM
+#============
+#For a fixed positive integer k, order all possible k-mers taken from an underlying alphabet lexicographically.
+
+#Then the k-mer composition of a string s can be represented by an array A for which A[m] denotes the number of times that the mth k-mer (with respect to the lexicographic order) appears in s.
+
+#Given: A DNA string s in FASTA format (having length at most 100 kbp).
+#Return: The 4-mer composition of s.
+
+#Sample Dataset
+#>Rosalind_6431
+#CTTCGAAAGTTTGGGCCGAGTCTTACAGTCGGTCTTGAAGCAAAGTAACGAACTCCACGGCCCTGACTACCGAACCAGTTGTGAGTACTCAACTGGGTGAGAGTGCAGTCCCTATTGAGT
+#TTCCGAGACTCACCGGGATTTTCGATCCAGCCTCAGTCCAGTCTTGTGGCCAACTCACCAAATGACGTTGGAATATCCCTGTCTAGCTCACGCAGTACTTAGTAAGAGGTCGCTGCAGCG
+#GGGCAAGGAGATCGGAAAATGTGCTCTATATGCGACTAAAGCTCCTAACTTACACGTAGACTTGCCCGTGTTAAAAACTCGGCTCACATGCTGTCTGCGGCTGGCTGTATACAGTATCTA
+#CCTAATACCCTTCAGTTCGCCGCACAAAAGCTGGGAGTTACCGCGGAAATCACAG
+#Sample Output
+#4 1 4 3 0 1 1 5 1 3 1 2 2 1 2 0 1 1 3 1 2 1 3 1 1 1 1 2 2 5 1 3 0 2 2 1 1 1 1 3 1 0 0 1 5 5 1 5 0 2 0 2 1 2 1 1 1 2 0 1 0 0 1 1 3 2 1 0 3 2 3 0 0 2 0 8 0 0 
+#1 0 2 1 3 0 0 0 1 4 3 2 1 1 3 1 2 1 3 1 2 1 2 1 1 1 2 3 2 1 1 0 1 1 3 2 1 2 6 2 1 1 1 2 3 3 3 2 3 0 3 2 1 1 0 0 1 4 3 0 1 5 0 2 0 1 2 1 3 0 1 2 2 1 1 0 3 0 
+#0 4 5 0 3 0 2 1 1 3 0 3 2 2 1 1 0 2 1 0 2 2 1 2 0 2 2 5 2 2 1 1 2 1 2 2 2 2 1 1 3 4 0 2 1 1 0 1 2 2 1 1 1 5 2 0 3 2 1 1 2 2 3 0 3 0 1 3 1 2 3 0 2 1 2 2 1 2 
+#3 0 1 2 3 1 1 3 1 0 1 1 3 0 2 1 2 2 0 2 1 1
+
+#============
+#CODE
+
+def main():
+    fastaseq = parse_sequence()
+    kmers_dictionary = get_kmers()
+    fragmentsofDNA = DNAcutter(fastaseq)
+    counter = count_kmers(kmers_dictionary, fragmentsofDNA)
+
+def parse_sequence():
+    from Bio import SeqIO
+    
+    file_name = input("Enter your file name (format file_name.fasta): ")
+
+    for seq_record in SeqIO.parse(file_name, "fasta"):
+        
+        fastaseq = seq_record.seq
+
+    return fastaseq
+def get_kmers():
+    nucleotides = ["A", "C", "G", "T"]
+    kmers = []
+    
+    for nt1 in nucleotides:
+        for nt2 in nucleotides:
+            for nt3 in nucleotides:
+                for nt4 in nucleotides:
+                    #print(nt1, nt2, nt3, nt4)
+                    kmer = [nt1+nt2+nt3+nt4]
+                    kmers.extend(kmer)
+    print(kmers)
+    return kmers
+
+def DNAcutter(fastaseq):
+    DNA_sequence = fastaseq
+    substrings = []
+    for k in range(0, len(DNA_sequence)):
+        fragment = DNA_sequence[k:k+4]
+        substrings.append(fragment)
+    print(substrings)
+    return substrings
+
+def count_kmers(kmers_dictionary, fragmentsofDNA):
+    for kmer in kmers_dictionary:
+        count = 0
+        for fragment in fragmentsofDNA:
+            if kmer == fragment:
+                count +=1
+        print(count, " ", end="")
+    
+
+
+main()
+    
