@@ -40,7 +40,7 @@
 
 import os
 os.chdir("/Users/dariosolissayago/Desktop/Rosalind")
-f =  open("casa.txt",  "w+")
+f =  open("kmers_solution.txt",  "w+")
 x= "\n"
 nts = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
 for  nt in nts:
