@@ -1,0 +1,119 @@
+#!/usr/bin/env python
+
+
+#PROBLEM
+#==================
+#To allow for the presence of its varying forms, a protein motif is represented by a shorthand as follows: [XY] means "either X or Y" and {X} means 
+#"any amino acid except X." For example, the N-glycosylation motif is written as N{P}[ST]{P}.
+
+#You can see the complete description and features of a particular protein by its access ID "uniprot_id" in the UniProt database, by inserting the ID number into
+
+#http://www.uniprot.org/uniprot/uniprot_id
+#Alternatively, you can obtain a protein sequence in FASTA format by following
+#http://www.uniprot.org/uniprot/uniprot_id.fasta
+#For example, the data for protein B5ZC00 can be found at http://www.uniprot.org/uniprot/B5ZC00.
+
+#Given: At most 15 UniProt Protein Database access IDs.
+#Return: For each protein possessing the N-glycosylation motif, output its given access ID followed by a list of locations in the protein string where the motif can be found.
+
+#Sample Dataset
+#A2Z669
+#B5ZC00
+#P07204_TRBM_HUMAN
+#P20840_SAG1_YEAST
+#Sample Output
+#B5ZC00
+#85 118 142 306 395
+#P07204_TRBM_HUMAN
+#47 115 116 382 409
+#P20840_SAG1_YEAST
+#79 109 135 248 306 348 364 402 485 501 614
+
+
+#==================
+#CODE
+
+
+#Change directory is not required, but if used, make sure it is located in the proper folder!!
+
+import os
+os.chdir("/Users/dariosolissayago/Desktop/Rosalind")
+#we could write a short program to readlines to ids, but  i am lazy
+ids = ["P04278_SSBP_HUMAN", "P04180_LCAT_HUMAN", "B3ET80", "P07204_TRBM_HUMAN", "P20268", "Q1JLH6", "P05155_IC1_HUMAN", "B4U0J5", "Q90304_C166_CARAU", "P00750_UROT_HUMAN", "Q03745", "P04141_CSF2_HUMAN", "Q8PV50", "Q8WW18"]
+urls_list = []
+dictio_aa_seqs = {}
+aa_seqs = []
+aa_seqs_2 = []
+amino_codes = ["G", "A", "L", "M", "F", "W", "K", "Q", "E", "S", "P", "V",  "I", "C", "Y", "H", "R", "N", "D", "T"]
+ofile = open("myfasta.txt", "w")
+
+for id in ids:
+    x = "https://www.uniprot.org/uniprot/"+ id + ".fasta"
+    urls_list.append(x)
+    dictio_aa_seqs[id] = "x"
+
+
+import urllib.request
+
+for url in urls_list:
+    file = urllib.request.urlopen(url)
+    message = file.read().decode("utf-8")
+    ofile.write(message)
+    
+ofile.close()   
+    
+
+with open("/Users/dariosolissayago/Desktop/Rosalind/myfasta.txt") as f_input, open('output.fasta', 'w') as f_output:
+    block = []
+
+    for line in f_input:
+        if line.startswith('>'):
+            if block:
+                f_output.write(''.join(block) + '\n')
+                block = []
+            f_output.write(line)
+        else:
+            block.append(line.strip())
+
+    if block:
+        f_output.write(''.join(block) + '\n')
+        
+with open("/Users/dariosolissayago/Desktop/Rosalind/output.fasta") as f_input, open('output2.fasta', 'w') as f_output:
+    for line in f_input:
+        if ">" not in line:
+            #print(line)
+            aa_seqs.append(line)
+for  seq  in  aa_seqs:
+    seqo =  seq.strip()
+    aa_seqs_2.append(seqo)
+
+for i in range(len(aa_seqs_2)):
+    dictio_aa_seqs[ids[i]] = aa_seqs_2[i]
+
+
+for key in dictio_aa_seqs.keys():
+    positions = []
+    print()
+    print(key)
+        
+    for value in dictio_aa_seqs.values():
+         
+        for aa in amino_codes:
+                for aan in amino_codes:
+                    if aa != "P" and aan != "P":
+                        
+                        x =  "N" + aa +  "S"  + aan
+                        y =  "N" + aa +  "T"  + aan
+                        r = [x, y]
+                        
+                        for ele in r:
+                            if ele in value:
+                                if dictio_aa_seqs[key] == value:
+                                    position = (value.index(ele) + 1)
+                                    positions.append(position)
+                                    
+    newer = sorted(positions)
+    for i  in newer:
+        print(i, " ",end="")
+                        
+#We could write output  to a .txt  file, but as I told you I am lazy today 
