@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+
+
+#PROBLEM
+#===========
+#In a weighted alphabet, every symbol is assigned a positive real number called a weight. A string formed from a weighted alphabet is called a weighted string, 
+#and its weight is equal to the sum of the weights of its symbols.
+
+#The standard weight assigned to each member of the 20-symbol amino acid alphabet is the monoisotopic mass of the corresponding amino acid.
+
+#Given: A protein string P of length at most 1000 aa.
+#Return: The total weight of P. Consult the monoisotopic mass table.
+
+#Sample Dataset
+#SKADYEK
+#Sample Output
+#821.392
+
+#===========
+#CODE
+
+seq = str(input("Enter aa sequence: "))
+
+mass = 0
+
+for i in seq:
+    if i == "A":
+        mass += float(71.03711)
+    elif i == "C":
+        mass += float(103.00919)
+    elif i == "D":
+        mass += float(115.02694)
+    elif i == "E":
+        mass += float(129.04259)
+    elif i == "F":
+        mass += float(147.06841)
+    elif i == "G":
+        mass += float(57.02146)
+    elif i == "H":
+        mass += float(137.05891)
+    elif i == "I":
+        mass += float(113.08406)
+    elif i == "K":
+        mass += float(128.09496)
+    elif i == "L":
+        mass += float(113.08406)
+    elif i == "M":
+        mass += float(131.04049)
+    elif i == "N":
+        mass += float(114.04293)
+    elif i == "P":
+        mass += float(97.05276)
+    elif i == "Q":
+        mass += float(128.05858)
+    elif i == "R":
+        mass += float(156.10111)
+    elif i == "S":
+        mass += float(87.03203)
+    elif i == "T":
+        mass += float(101.04768)
+    elif i == "V":
+        mass += float(99.06841)
+    elif i == "W":
+        mass += float(186.07931)
+    elif i == "Y":
+        mass += float(163.06333)
+
+print(mass)
