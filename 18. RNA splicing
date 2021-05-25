@@ -1,0 +1,124 @@
+#!/usr/bin/env python
+
+#PROBLEM
+#===========
+#After identifying the exons and introns of an RNA string, we only need to delete the introns and concatenate the exons to form a new string ready for translation.
+
+#Given: A DNA string s (of length at most 1 kbp) and a collection of substrings of s acting as introns. All strings are given in FASTA format.
+#Return: A protein string resulting from transcribing and translating the exons of s. (Note: Only one solution will exist for the dataset provided.)
+
+#Sample Dataset
+#>Rosalind_10
+#ATGGTCTACATAGCTGACAAACAGCACGTAGCAATCGGTCGAATCTCGAGAGGCATATGGTCACATGATCGGTCGAGCGTGTTTCAAAGTTTGCGCCTAG
+#>Rosalind_12
+#ATCGGTCGAA
+#>Rosalind_15
+#ATCGGTCGAGCGTGT
+#Sample Output
+#MVYIADKQHVASREAYGHMFKVCA
+#===========
+#CODE
+
+
+#The genetic code is taken from a previous problem, it could be saved and imported as a library.
+def main():
+    dna_seq = get_dna()
+    introns = get_introns()
+    premrna = get_premrna_from_gene_seq(dna_seq)
+    introns = introns_to_rna(introns)
+    mrna = get_mrna(premrna, introns)
+    protein=get_prot_from_mrna(mrna)
+
+def get_dna():
+    full_gene_seq = input("Enter the full gene sequence: ")
+    print(full_gene_seq)
+    print()
+    return full_gene_seq
+
+def get_introns():
+    keep_going = "yes"
+    intron_seq = []
+    while keep_going != "no":
+        new_intron = input("Enter intron sequence: ")
+        intron_seq.append(new_intron)
+        keep_going =  input("Do you have more intron sequences? ")
+    print(intron_seq)
+    print()
+    
+    return intron_seq
+def get_premrna_from_gene_seq(dna_seq):
+    for nucleotide in dna_seq:
+        if nucleotide == "T":
+            premrna = dna_seq.replace("T", "U")
+    print(premrna)
+    print()
+    return premrna
+
+def introns_to_rna(introns):
+    intron_rna = []
+    for intron in introns:
+        for nucleotide in intron:
+            if nucleotide == "T":
+                intron_in_rna = intron.replace("T", "U")
+        intron_rna.append(intron_in_rna)
+    print(intron_rna)
+    print()
+    return intron_rna
+
+def get_mrna(premrna, introns):
+    replaced_mrna_sequence = premrna.replace(introns[0], "")
+    for intron in introns[1:]:
+        replaced_mrna_sequence = replaced_mrna_sequence.replace(intron, "")
+    print(replaced_mrna_sequence)
+    print()
+    return replaced_mrna_sequence
+
+def get_prot_from_mrna(mrna):
+    breakat = 3
+    translated = [mrna[i:i+breakat] for i in range(0, len(mrna), breakat)]
+    for i in translated:
+        if i == "UUU" or i=="UUC":
+            print("F", end="")
+        elif i == "UUA" or i == "UUG" or i == "CUU" or i == "CUC" or i == "CUA" or i == "CUG":
+            print("L", end="")
+        elif i == "UCU" or i == "UCC" or i == "UCA" or i == "UCG" or i == "AGU" or i == "AGC":
+            print("S", end="")
+        elif i == "UAU" or i == "UAC":
+            print("Y", end="")
+        elif i == "UAA" or i == "UAG" or i == "UGA":
+            print("Stop", end="")       
+        elif i == "UGU" or i == "UGC":
+            print("C", end="")     
+        elif i == "UGG":
+            print("W", end="")     
+        elif i == "CCU" or i == "CCC" or i == "CCA" or i == "CCG" :
+            print("P", end="")       
+        elif i == "CAU" or i == "CAC":
+            print("H", end="")           
+        elif i == "CAA" or i == "CAG":
+            print("Q", end="")       
+        elif i == "CGU" or i == "CGC" or i == "CGA" or i == "CGG" or i == "AGA" or i == "AGG":
+            print("R", end="")       
+        elif i == "AUU" or i == "AUC" or i == "AUA":
+            print("I", end="")        
+        elif i == "AUG":
+            print("M", end="")
+        elif i == "ACU" or i == "ACC" or i == "ACA" or i == "ACG":
+            print("T", end="")       
+        elif i == "AAU" or i == "AAC":
+            print("N", end="") 
+        elif i == "AAA" or i == "AAG":
+            print("K", end="") 
+        elif i == "GUU" or i == "GUC" or i == "GUA" or i == "GUG":
+            print("V", end="")
+        elif i == "GCU" or i == "GCC" or i == "GCA" or i == "GCG":
+            print("A", end="")
+        elif i == "GAU" or i == "GAC":
+            print("D", end="")
+        elif i == "GAA" or i == "GAG":
+            print("E", end="") 
+        elif i == "GGU" or i == "GGC" or i == "GGA" or i == "GGG":
+            print("G", end="")
+
+
+main()
