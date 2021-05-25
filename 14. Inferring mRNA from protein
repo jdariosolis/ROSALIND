@@ -2,4 +2,67 @@
 
 
 
+#PROBLEM
+#===========
+#For positive integers a and n, a modulo n (written amodn in shorthand) is the remainder when a is divided by n. For example, 29mod11=7 because 29=11×2+7.
+
+#Modular arithmetic is the study of addition, subtraction, multiplication, and division with respect to the modulo operation. We say that a and b are 
+#congruent modulo n if amodn=bmodn; in this case, we use the notation a≡bmodn.
+
+#Two useful facts in modular arithmetic are that if a≡bmodn and c≡dmodn, then a+c≡b+dmodn and a×c≡b×dmodn. To check your understanding of these rules, 
+#you may wish to verify these relationships for a=29, b=73, c=10, d=32, and n=11.
+
+#As you will see in this exercise, some Rosalind problems will ask for a (very large) integer solution modulo a smaller number to avoid the computational 
+#pitfalls that arise with storing such large numbers.
+
+#Given: A protein string of length at most 1000 aa.
+#Return: The total number of different RNA strings from which the protein could have been translated, modulo 1,000,000. (Don't neglect importance of stop codon.)
+
+#Sample Dataset
+#MA
+#Sample Output
+#12
+
+#===========
+#CODE
+
+
+
+
+
+
+
+protein_seq =  input("Enter your protein sequence:")
+
+combinato =  1
+
+for i in  protein_seq:
+    if i  == "W" or i == "M":
+        combinato = combinato*1
+        
+    elif  i == "F" or i == "Y" or i == "C" or i == "H" or i == "Q" or i == "N" or i == "K" or i == "D" or i == "E":
+        combinato = combinato*2
+
+    elif i == "I":
+        combinato = combinato*3
+
+    elif i == "P" or i == "T" or i == "V" or i == "A" or i == "G":
+        combinato = combinato*4
+        
+    elif i  == "L" or i == "S" or i == "R":
+        combinato = combinato*6
+        
+    else:
+        print("There is an error")
+
+
+modulus_result = (combinato*3) % 1000000
+
+print("The number of possible combinations is", combinato*3)
+print("The result in modulo 1000000 is", modulus_result)
+
+
+
+
+
 
